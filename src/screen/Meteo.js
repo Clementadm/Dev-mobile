@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, Dimensions } from "react-native";
 import { useState, useEffect } from "react";
+import { Card } from "react-native-elements";
 
 import DateHeure from "../components/DateHeure";
 
