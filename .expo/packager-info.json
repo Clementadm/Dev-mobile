@@ -1,10 +1,10 @@
 {
   "devToolsPort": 19002,
   "expoServerPort": null,
-  "packagerPort": null,
+  "packagerPort": 19000,
   "packagerPid": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://f5-7kn.cadm972.projet-final.exp.direct",
+  "packagerNgrokUrl": "https://packager.f5-7kn.cadm972.projet-final.exp.direct",
+  "ngrokPid": 23140,
   "webpackServerPort": null
 }

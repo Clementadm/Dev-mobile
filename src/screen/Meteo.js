@@ -1,12 +1,9 @@
 import { StyleSheet, View, Text, TextInput, Platform } from "react-native";
 import { useState, useEffect } from "react";
-import * as Localization from "expo-localization";
 
 import DateHeure from "../components/DateHeure";
 
 apiKey = "3932ba01df8229908d7822d35db8123b";
-// var latitude = "14°34'28.6 N";
-// var longitude = "60°57'59.9W";
 var latitude = "14.574620";
 var longitude = "-60.966648";
 function Meteo() {
