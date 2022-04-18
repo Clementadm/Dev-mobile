@@ -1,8 +1,39 @@
-import { StyleSheet, View, Text, Dimensions, Image } from "react-native";
-import { useState, useEffect } from "react";
-import { Card } from "react-native-elements";
+import { StyleSheet, View, Text, Image } from "react-native";
+import { useState } from "react";
 
 import DateHeure from "../components/DateHeure";
+
+const jour = [
+  "Dimanche",
+  "Lundi",
+  "Mardi",
+  "Mercredi",
+  "Jeudi",
+  "Vendredi",
+  "Samedi",
+];
+
+const mois = [
+  "Janvier",
+  "Février",
+  "Mars",
+  "Avril",
+  "Mai",
+  "Juin",
+  "Juillet",
+  "Août",
+  "Septembre",
+  "Octobre",
+  "Novembre",
+  "Décembre",
+];
+
+var nbrJour = new Date().getDay();
+var date = new Date().getDate();
+var nbrMois = new Date().getMonth() + 1;
+var année = new Date().getFullYear();
+var heure = new Date().getHours();
+var min = new Date().getMinutes();
 
 apiKey = "3932ba01df8229908d7822d35db8123b";
 // var latitude = "14.574620";
@@ -33,6 +64,8 @@ function Meteo() {
       </View>
     );
   };
+
+  var a = DateHeure;
 
   fetch(
     `https://api.openweathermap.org/data/2.5/onecall?lat=${latitude}&lon=${longitude}&exclude=hourly,minutely&units=metric&appid=${apiKey}`
@@ -85,14 +118,13 @@ function Meteo() {
       <View>
         <View>
           <Text style={styles.time}>
-            {new Date().getHours() + ":" + new Date().getMinutes()}
+            {heure}:{min}
           </Text>
           <Text style={styles.date}>
-            {new Date().getDate() +
-              "/" +
-              new Date().getMonth() +
-              "/" +
-              new Date().getFullYear()}
+            {jour[nbrJour]} {date}
+          </Text>
+          <Text style={styles.date}>
+            {mois[nbrMois]} {année}
           </Text>
         </View>
         <Text style={styles.description}>{description}</Text>
@@ -151,6 +183,7 @@ const styles = StyleSheet.create({
     color: "#d1ae54",
     fontWeight: "300",
     padding: -55,
+    marginLeft: 20,
   },
   description: {
     fontSize: 30,

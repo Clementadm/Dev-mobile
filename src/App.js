@@ -1,20 +1,23 @@
-import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import { registerRootComponent } from "expo";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 import Identification from "./screen/Identification";
 import Event from "./screen/Event";
-import Map from "./screen/Map";
 import Meteo from "./screen/Meteo";
+
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      {/* <Text>Open up App.js to start working on your app!</Text> */}
-      {/* <Identification /> */}
-      <Meteo />
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Identification" component={Identification} />
+        <Stack.Screen name="Event" component={Event} />
+        <Stack.Screen name="Meteo" component={Meteo} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

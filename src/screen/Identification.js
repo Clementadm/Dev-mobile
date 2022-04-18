@@ -13,7 +13,7 @@ import data from "../../assets/data.json";
 import Avatar from "../components/Avatar";
 import Button from "../components/Button";
 
-function Identification() {
+function Identification({ navigation }) {
   const [value, setValue] = useState("");
   const [member, setMember] = useState(null);
   const [error, setError] = useState(false);
@@ -41,6 +41,14 @@ function Identification() {
       setError(!found);
     }
   };
+
+  const onNavigateToHome = () => {
+    navigation.navigate("Meteo");
+  };
+  const onNavigateToEvent = () => {
+    navigation.navigate("Event");
+  };
+
   const header = (
     <View style={styles.header}>
       <Text style={styles.title}>{app.expo.name}</Text>
@@ -56,6 +64,15 @@ function Identification() {
           <Text style={styles.greetings}>
             Bienvenu·e {member.firstname} {member.lastname} !
           </Text>
+          <View style={styles.actions}>
+            <Button
+              title="Add an event to your calendar"
+              onPress={onNavigateToEvent}
+            />
+          </View>
+          <View style={styles.actions}>
+            <Button title="Check the meteo" onPress={onNavigateToHome} />
+          </View>
         </View>
       </View>
     );
