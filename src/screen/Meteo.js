@@ -72,19 +72,14 @@ function Meteo() {
 
       timezone = data.timezone;
       setTimezone(timezone);
-      // console.log(latitude, "N", longitude, "E");
-      // console.log("-----------------------");
 
       icon = data.current.weather[0].icon;
       setIcon(icon);
-      console.log(icon);
     });
 
   const imageApi = {
     uri: "http://openweathermap.org/img/wn/" + icon + "@2x.png",
   };
-  console.log(imageApi, "icon =", icon);
-
   return (
     <View style={styles.container}>
       <View>
@@ -146,23 +141,24 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 45,
-    color: "black",
+    color: "#d1ae54",
     fontWeight: "100",
     padding: 10,
     marginTop: 30,
   },
   date: {
     fontSize: 25,
-    color: "black",
+    color: "#d1ae54",
     fontWeight: "300",
     padding: -55,
   },
   description: {
-    fontSize: 25,
-    color: "#eee",
-    fontWeight: "300",
+    fontSize: 30,
+    color: "#ffb3b3",
+    fontWeight: "bold",
     padding: 40,
-    marginLeft: 65,
+    marginLeft: 55,
+    textTransform: "capitalize",
   },
   rightAlign: {
     textAlign: "right",
@@ -170,7 +166,7 @@ const styles = StyleSheet.create({
   },
   timezone: {
     fontSize: 20,
-    color: "black",
+    color: "#d1ae54",
     textAlign: "center",
     marginLeft: -220,
     padding: 10,
@@ -178,14 +174,14 @@ const styles = StyleSheet.create({
   },
   ville: {
     fontSize: 16,
-    color: "black",
+    color: "#d1ae54",
     fontWeight: "700",
     textAlign: "center",
     marginLeft: -220,
   },
   latlong: {
     fontSize: 16,
-    color: "black",
+    color: "#d1ae54",
     fontWeight: "700",
     marginLeft: -200,
   },
