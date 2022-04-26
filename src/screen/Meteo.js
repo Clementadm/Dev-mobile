@@ -2,6 +2,8 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import { useState } from "react";
 
 import DateHeure from "../components/DateHeure";
+import Identification from "./Identification.js";
+import data from "../../assets/data.json";
 
 const jour = [
   "Dimanche",
@@ -136,8 +138,8 @@ function Meteo() {
               value={"    " + pressureAtmos}
               unit="hPA"
             />
-            <WeatherItem title="Sunrise :" value={sunriseTime} unit="" />
-            <WeatherItem title="Sunset :" value={sunsetTime} unit="" />
+            <WeatherItem title="Sunrise :" value={sunriseTime} unit="H" />
+            <WeatherItem title="Sunset :" value={sunsetTime} unit="H" />
           </View>
           <View style={styles.weatherItemContainerDroite}>
             <WeatherItem title="Now :" value={"    " + actualTemp} unit="°C" />
