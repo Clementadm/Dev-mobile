@@ -12,8 +12,8 @@
 Event Manager is an app develop in React-Native for a school project.  
 With our app you can :
 
-- add an event diretly to your default calendar
--
+- add an event directly to your default calendar
+- check the wheather
 
 ## Use our App
 
