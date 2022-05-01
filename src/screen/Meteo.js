@@ -48,17 +48,12 @@ function Meteo() {
       console.log("Wait to get Geolocalisation");
     }, 4000);
   } else {
+    //Géolocalisation ==> get latitute et longitude
     // console.log(geoloc);
     var latitude = geoloc[0];
     var longitude = geoloc[1];
+    var ville = geoloc[2];
   }
-
-  //Géolocalisation ==> get latitute et longitude
-
-  // console.log("/n -----------------------------/n", geoloc.coords.latitude);
-  // await console.log(geoloc.coords);
-  // console.log(geoloc.latitude);
-  // console.log(JSON.stringify(geoloc.longitude));
   var [humidity, setHumidity] = useState("");
   var [actualTemp, setActualTemp] = useState("");
   var [minTemp, setMinTemp] = useState("");
@@ -170,7 +165,8 @@ function Meteo() {
         <Text style={styles.latlong}>
           {latitude}N {longitude}E
         </Text>
-        <Text style={styles.ville}> Bordeaux</Text>
+        <Text style={styles.ville}> {ville}</Text>
+        {/* <Text style={styles.ville}> Bordeaux</Text> */}
       </View>
       <View style={styles.center}>
         <Image source={imageApi} style={styles.image} />

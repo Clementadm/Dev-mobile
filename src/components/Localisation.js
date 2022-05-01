@@ -4,8 +4,9 @@ import * as Location from "expo-location";
 function useLocation() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [latitude, setLatitude] = useState(null);
-  const [longitude, setLongitude] = useState(null);
+  // const [latitude, setLatitude] = useState(null);
+  // const [longitude, setLongitude] = useState(null);
+  const [ville, setVille] = useState(null);
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
@@ -16,6 +17,14 @@ function useLocation() {
 
       let location = await Location.getCurrentPositionAsync({});
       setLocation(location);
+
+      //ajout
+      let regionName = await Location.reverseGeocodeAsync({
+        longitude: location.coords.longitude,
+        latitude: location.coords.latitude,
+      });
+      setVille(regionName[0].city);
+      // console.log("\n ------------\n", ville, "\n ------------\n");
     })();
   }, []);
 
@@ -23,31 +32,12 @@ function useLocation() {
   if (errorMsg) {
     text = errorMsg;
   } else if (location) {
-    return [location.coords.latitude, location.coords.longitude];
+    console.log(location);
+    return [location.coords.latitude, location.coords.longitude, ville];
   }
 
   // return location;
   // return [latitude, longitude];
 }
-// const [location, setLocation] = useState();
-// const getLocation = async () => {
-//   try {
-//     const { granted } = await Location.requestForegroundPermissionsAsync();
-//     if (!granted) return;
-//     const {
-//       coords: { latitude, longitude },
-//     } = await Location.getCurrentPositionAsync();
-//     setLocation({ latitude, longitude });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// };
-
-// useEffect(() => {
-//   getLocation();
-// }, []);
-
-// return location;
-//}
 
 export default useLocation;
