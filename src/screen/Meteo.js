@@ -2,8 +2,7 @@ import { StyleSheet, View, Text, Image } from "react-native";
 import { useState } from "react";
 
 import DateHeure from "../components/DateHeure";
-import Identification from "./Identification.js";
-import data from "../../assets/data.json";
+import useLocation from "../components/Localisation";
 
 const jour = [
   "Dimanche",
@@ -38,11 +37,28 @@ var heure = new Date().getHours();
 var min = new Date().getMinutes();
 
 apiKey = "3932ba01df8229908d7822d35db8123b";
-// var latitude = "14.574620";
-// var longitude = "-60.966648";
-var latitude = "44.844362";
-var longitude = "-0.572744";
+// latitutude et longitude pour bordeaux
+// var latitude = "44.844362";
+// var longitude = "-0.572744";
+
 function Meteo() {
+  var geoloc = useLocation();
+  if (geoloc == undefined) {
+    setTimeout(() => {
+      console.log("Wait to get Geolocalisation");
+    }, 4000);
+  } else {
+    // console.log(geoloc);
+    var latitude = geoloc[0];
+    var longitude = geoloc[1];
+  }
+
+  //Géolocalisation ==> get latitute et longitude
+
+  // console.log("/n -----------------------------/n", geoloc.coords.latitude);
+  // await console.log(geoloc.coords);
+  // console.log(geoloc.latitude);
+  // console.log(JSON.stringify(geoloc.longitude));
   var [humidity, setHumidity] = useState("");
   var [actualTemp, setActualTemp] = useState("");
   var [minTemp, setMinTemp] = useState("");
