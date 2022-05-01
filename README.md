@@ -46,7 +46,7 @@ yarn start
 
 You can use Expo mobile to start directly with our in app !
 
-<p align="center">Open the camera app on your device and scan the code below</p>
+<p align="center">Dowload Expo Go and scan the code below</p>
 <p align="center">↓↓↓</p>
 <p align="center">
   <img
