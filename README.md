@@ -12,8 +12,8 @@
 Event Manager is an app develop in React-Native for a school project.  
 With our app you can :
 
-- add an event directly to your default calendar
-- check the wheather
+- Add an event directly to the default calendar of your smartphone
+- Get the forecast weather of the day for your actual location
 
 ## Use our App
 
@@ -44,18 +44,15 @@ yarn start
 
 ## Use our App
 
-You can use Expo mobile to start directly with our in app.
-URL of the application deployed on Expo :
+You can use Expo mobile to start directly with our in app !
 
-```sh
-taper ur
-!!!!!!
-!!!!!!
-!!!!!!
-!!!!!!
-!!!!!!
-!!!!!!
-!!!!!!
-!!!!!!
+<p align="center">Open the camera app on your device and scan the code below</p>
+<p align="center">↓↓↓</p>
+<p align="center">
+  <img
+    width="300px"
+    src="doc/QRCode Expo.jpg"
+    alt="QRCODE" />
+</p>
 
-```
+[Or, open this link on your device:](exp://exp.host/@cadm972/eventmanager-weather?release-channel=default)
