@@ -36,7 +36,7 @@ var année = new Date().getFullYear();
 var heure = new Date().getHours();
 var min = new Date().getMinutes();
 
-apiKey = "3932ba01df8229908d7822d35db8123b";
+const apiKey = "3932ba01df8229908d7822d35db8123b";
 // latitutude et longitude pour bordeaux
 // var latitude = "44.844362";
 // var longitude = "-0.572744";
