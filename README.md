@@ -55,4 +55,4 @@ You can use Expo mobile to start directly with our in app !
     alt="QRCODE" />
 </p>
 
-[Or, open this link on your device:](exp://exp.host/@cadm972/eventmanager-weather?release-channel=default)
+[Or, open this link on your device:](https://expo.dev/@cadm972/eventmanager-weather)
