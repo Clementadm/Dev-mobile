@@ -1,133 +1,210 @@
 import { StyleSheet, View, Text, TextInput, Platform } from "react-native";
-import { useState, useEffect } from "react";
-import * as Calendar from "expo-calendar";
+import { useState, useEffect, useMemo } from "react";
+import {
+  requestCalendarPermissionsAsync,
+  getCalendarsAsync,
+  EntityTypes,
+  createCalendarAsync,
+  getDefaultCalendarAsync,
+  CalendarAccessLevel,
+  createEventAsync,
+} from "expo-calendar";
 
 import Button from "../components/Button";
 
-// date à rentrer sous form april 10 2022
-function Event() {
-  const [valueDate, setValue] = useState("Pas de date");
-  const [valueTitle, setValueTitle] = useState("Pas de titre");
-  const [valueLocation, setValueLocation] = useState("Pas de localisation");
-  const [error, setError] = useState(false);
+const CALENDAR_TITLE = "Le calendrier de Clément";
+const USER_NAME = "Clément Augier De Moussac";
+
+function Event({ navigation }) {
   const [granted, setGranted] = useState(false);
-  // var calendarId = 0;
-  const onChange = (text) => {
-    setValue(text);
-  };
-  const onPress = () => {
-    setValueTitle(valueTitle);
-    setValueLocation(valueLocation);
-    createEvent(valueDate, valueTitle);
-  };
+  const [title, setTitle] = useState("");
+  const [date, setDate] = useState("");
+  const [location, setLocation] = useState("");
+  const [calendar, setCalendar] = useState({});
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const styles = useMemo(
+    () => createStyles({ color: calendar.color }),
+    [calendar.color]
+  );
 
-  function createEvent(date, valueTitle, valueLocation) {
-    // createCalendar();
-    // const id = calendarId;
-    // const calendarId = calendars.id;
-
-    // const calendarId = "16";
-    const calendarId = "21";
-    const eventData = {
-      title: valueTitle,
-      startDate: new Date(Date.parse(date)),
-      endDate: new Date(Date.parse(date) + 2 * 60 * 60 * 1000),
-      timeZone: "Europe/Paris",
-      location: valueLocation,
-      // location: "89 Quai des Chartrons, 33300 Bordeaux",
-    };
-    // Calendar.createEventAsync(id, eventData);
-    // Calendar.createEventAsync(calendarId, eventData);
-    // console.log("Event push");
-    // console.log
-    pushEvent(calendarId, eventData);
+  async function onCreateEvent() {
+    setLoading(true);
+    try {
+      const timeZone = "Europe/Paris";
+      const timeZoneOffSet = 2 * 60 * 60 * 1000;
+      const startDate = Date.parse(date) + timeZoneOffSet + 1000;
+      const id = await createEventAsync(calendar.id, {
+        title,
+        startDate,
+        endDate: startDate,
+        allDay: true,
+        location,
+        timeZone,
+      });
+      if (id) {
+        setError(null);
+        navigation.navigate("Identification");
+      } else {
+        setError("Event not created. Please try again.");
+      }
+    } catch (error) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
   }
 
-  function pushEvent(calendarId, eventData) {
-    Calendar.createEventAsync(calendarId, eventData);
-    console.log("Event push");
-    console.log;
+  async function requestPermissions() {
+    const { status } = await requestCalendarPermissionsAsync();
+    setGranted(status);
   }
 
   async function getDefaultCalendarSource() {
-    const defaultCalendar = await Calendar.getDefaultCalendarAsync();
+    const defaultCalendar = await getDefaultCalendarAsync();
     return defaultCalendar.source;
   }
 
-  async function obtainCalendarPermission() {
-    const { status } = await Calendar.requestCalendarPermissionsAsync();
-    if (status === "granted") {
-      setGranted(true);
-
-      const defaultCalendarSource =
+  async function getCalendar() {
+    const calendars = await getCalendarsAsync(EntityTypes.EVENT);
+    const existingCalendar = calendars.find(
+      (calendar) => calendar.title === CALENDAR_TITLE
+    );
+    if (existingCalendar) {
+      setCalendar(existingCalendar);
+    } else {
+      const source =
         Platform.OS === "ios"
           ? await getDefaultCalendarSource()
-          : { isLocalAccount: true, name: "Expo Calendar" };
-      const newCalendarID = await Calendar.createCalendarAsync({
-        title: "Calendar Manager APP",
-        color: "cyan",
-        entityType: Calendar.EntityTypes.EVENT,
-        sourceId: defaultCalendarSource.id,
-        source: defaultCalendarSource,
-        name: "internalCalendarName",
-        ownerAccount: "personal",
-        accessLevel: Calendar.CalendarAccessLevel.OWNER,
+          : { isLocalAccount: true, name: USER_NAME };
+      const id = await createCalendarAsync({
+        name: CALENDAR_TITLE,
+        title: CALENDAR_TITLE,
+        color: "red",
+        source,
+        ownerAccount: USER_NAME,
+        accessLevel: CalendarAccessLevel.OWNER,
       });
-      console.log(`Your new calendar ID is: ${newCalendarID}`);
-
-      const calendars = await Calendar.getCalendarsAsync(
-        Calendar.EntityTypes.EVENT
-      );
-      // console.log("Here are all your calendars:");
-      // console.log({ calendars });
-    } else {
-      setError("Permissions not granted");
+      const calendars = await getCalendarsAsync(EntityTypes.EVENT);
+      const newCalendar = calendars.find((calendar) => calendar.id === id);
+      setCalendar(newCalendar);
     }
   }
 
   useEffect(() => {
-    obtainCalendarPermission();
-  });
+    requestPermissions();
+  }, []);
+
+  useEffect(() => {
+    if (granted) {
+      getCalendar();
+    }
+  }, [granted]);
+
+  if (!granted)
+    return (
+      <View>
+        <Text>
+          You have to grant permission to create an event. Please go to your
+          device settings and allow this app to edit your calendar.
+        </Text>
+      </View>
+    );
 
   return (
-    <View>
-      <Text>Choose the event date : </Text>
-      <TextInput
-        placeholder="Date (month day year) "
-        style={styles.input}
-        valueDate={valueDate}
-        onChangeText={onChange}
-      />
-      <TextInput
-        placeholder="Title"
-        style={styles.input}
-        valueDate={valueTitle}
-        onChangeText={onChange}
-      />
-      <TextInput
-        placeholder="Localisation"
-        style={styles.input}
-        valueDate={valueLocation}
-        onChangeText={onChange}
-      />
-      {granted && <Button title="Push the event" onPress={onPress} />}
+    <View style={styles.root}>
+      <View style={styles.field}>
+        <Text style={styles.label}>Title</Text>
+        <TextInput
+          value={title}
+          onChangeText={setTitle}
+          placeholder="🥗 Lunch w/ friends"
+          style={styles.input}
+        />
+      </View>
+      <View style={[styles.field, styles.calendar]}>
+        <View style={styles.dot} />
+        <Text style={styles.label}>{calendar.title}</Text>
+      </View>
+      <View style={styles.field}>
+        <Text style={styles.label}>Date</Text>
+        <TextInput
+          value={date}
+          onChangeText={setDate}
+          placeholder="01/13/2022"
+          style={styles.input}
+        />
+        <Text style={styles.legend}>
+          Format should be mm/dd/yyyy e.g. 01/13/2022
+        </Text>
+      </View>
+      <View style={styles.field}>
+        <Text style={styles.label}>Location</Text>
+        <TextInput
+          value={location}
+          onChangeText={setLocation}
+          placeholder="Restaurant les 3 marmites, 33300 Bordeaux"
+          style={styles.input}
+        />
+      </View>
+      <View style={styles.actions}>
+        <Button
+          title={loading ? "Creating..." : "Create"}
+          onPress={!loading && onCreateEvent}
+        />
+      </View>
+      {error && (
+        <View>
+          <Text style={styles.error}>{error}</Text>
+        </View>
+      )}
     </View>
   );
 }
 
 export default Event;
 
-const styles = StyleSheet.create({
-  list: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
-  },
-  avatar: {
-    margin: 8,
-  },
-  footer: {
-    backgroundColor: "white",
-    padding: 32,
-  },
-});
+const createStyles = ({ color }) =>
+  StyleSheet.create({
+    root: {
+      padding: 16,
+    },
+    field: {
+      paddingVertical: 4,
+    },
+    input: {
+      fontSize: 20,
+      padding: 8,
+      borderColor: "black",
+      borderWidth: 4,
+      borderStyle: "solid",
+    },
+    label: {
+      fontSize: 20,
+      fontWeight: "700",
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    calendar: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    legend: {
+      fontSize: 14,
+    },
+    actions: {
+      paddingVertical: 16,
+    },
+    dot: {
+      backgroundColor: color,
+      width: 20,
+      height: 20,
+      borderRadius: 10,
+      marginHorizontal: 8,
+    },
+    error: {
+      color: "red",
+    },
+  });
